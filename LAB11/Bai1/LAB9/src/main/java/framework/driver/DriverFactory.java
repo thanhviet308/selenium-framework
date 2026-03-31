@@ -14,8 +14,14 @@ public final class DriverFactory {
     }
 
     public static WebDriver createDriver(String browser) {
-        String b = browser == null ? "chrome" : browser.trim().toLowerCase();
-        boolean headless = Boolean.parseBoolean(System.getProperty("headless", "false"));
+        String b = (browser == null || browser.isBlank()) ? "chrome" : browser.trim().toLowerCase();
+
+        boolean isCI = System.getenv("CI") != null;
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        boolean isLinux = osName.contains("linux");
+        boolean hasDisplay = System.getenv("DISPLAY") != null || System.getenv("WAYLAND_DISPLAY") != null;
+        String defaultHeadless = (isCI || (isLinux && !hasDisplay)) ? "true" : "false";
+        boolean headless = Boolean.parseBoolean(System.getProperty("headless", defaultHeadless));
 
         switch (b) {
             case "firefox" -> {
@@ -23,6 +29,8 @@ public final class DriverFactory {
                 FirefoxOptions options = new FirefoxOptions();
                 if (headless) {
                     options.addArguments("-headless");
+                    options.addArguments("--width=1920");
+                    options.addArguments("--height=1080");
                 }
                 return new FirefoxDriver(options);
             }
@@ -31,6 +39,11 @@ public final class DriverFactory {
                 EdgeOptions options = new EdgeOptions();
                 if (headless) {
                     options.addArguments("--headless=new");
+                    options.addArguments("--window-size=1920,1080");
+                }
+                if (isLinux && (isCI || headless)) {
+                    options.addArguments("--no-sandbox");
+                    options.addArguments("--disable-dev-shm-usage");
                 }
                 return new EdgeDriver(options);
             }
@@ -39,6 +52,11 @@ public final class DriverFactory {
                 ChromeOptions options = new ChromeOptions();
                 if (headless) {
                     options.addArguments("--headless=new");
+                    options.addArguments("--window-size=1920,1080");
+                }
+                if (isLinux && (isCI || headless)) {
+                    options.addArguments("--no-sandbox");
+                    options.addArguments("--disable-dev-shm-usage");
                 }
                 return new ChromeDriver(options);
             }
