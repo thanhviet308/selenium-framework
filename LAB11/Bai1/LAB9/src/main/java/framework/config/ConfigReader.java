@@ -45,6 +45,10 @@ public final class ConfigReader {
     }
 
     public String getBaseUrl() {
+        String baseUrl = System.getenv("BASE_URL");
+        if (baseUrl != null && !baseUrl.isBlank()) {
+            return baseUrl.trim();
+        }
         return require("base.url");
     }
 
@@ -57,11 +61,27 @@ public final class ConfigReader {
     }
 
     public String getUsername() {
-        return require("username");
+        return requireCredential("username", "APP_USERNAME");
     }
 
     public String getPassword() {
-        return require("password");
+        return requireCredential("password", "APP_PASSWORD");
+    }
+
+    private String requireCredential(String propertyKey, String envVar) {
+        String fromEnv = System.getenv(envVar);
+        if (fromEnv != null && !fromEnv.isBlank()) {
+            return fromEnv.trim();
+        }
+
+        String fromProps = properties.getProperty(propertyKey);
+        if (fromProps != null && !fromProps.trim().isEmpty()) {
+            return fromProps.trim();
+        }
+
+        throw new IllegalStateException(
+                "Missing credential. Set environment variable '" + envVar + "' " +
+                        "or provide non-empty key '" + propertyKey + "' in config-" + env + ".properties");
     }
 
     private String require(String key) {

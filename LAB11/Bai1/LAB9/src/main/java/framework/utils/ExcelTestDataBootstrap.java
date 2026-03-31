@@ -18,6 +18,16 @@ public final class ExcelTestDataBootstrap {
     private ExcelTestDataBootstrap() {
     }
 
+    private static String appUsername() {
+        String u = System.getenv("APP_USERNAME");
+        return (u == null) ? "" : u.trim();
+    }
+
+    private static String appPassword() {
+        String p = System.getenv("APP_PASSWORD");
+        return (p == null) ? "" : p.trim();
+    }
+
     public static Path excelPath() {
         return Path.of("src", "test", "resources", "testdata", "login_data.xlsx");
     }
@@ -58,20 +68,20 @@ public final class ExcelTestDataBootstrap {
         header.createCell(3).setCellValue("description");
 
         Row r1 = sheet.createRow(1);
-        r1.createCell(0).setCellValue("standard_user");
-        r1.createCell(1).setCellValue("secret_sauce");
+        r1.createCell(0).setCellValue(appUsername());
+        r1.createCell(1).setCellValue(appPassword());
         r1.createCell(2).setCellValue("inventory");
-        r1.createCell(3).setCellValue("Smoke - Login success (standard_user)");
+        r1.createCell(3).setCellValue("Smoke - Login success");
 
         Row r2 = sheet.createRow(2);
         r2.createCell(0).setCellValue("problem_user");
-        r2.createCell(1).setCellValue("secret_sauce");
+        r2.createCell(1).setCellValue(appPassword());
         r2.createCell(2).setCellValue("inventory");
         r2.createCell(3).setCellValue("Smoke - Login success (problem_user)");
 
         Row r3 = sheet.createRow(3);
         r3.createCell(0).setCellValue("performance_glitch_user");
-        r3.createCell(1).setCellValue("secret_sauce");
+        r3.createCell(1).setCellValue(appPassword());
         r3.createCell(2).setCellValue("inventory");
         r3.createCell(3).setCellValue("Smoke - Login success (performance_glitch_user)");
     }
@@ -86,31 +96,31 @@ public final class ExcelTestDataBootstrap {
 
         Row r1 = sheet.createRow(1);
         r1.createCell(0).setCellValue("locked_out_user");
-        r1.createCell(1).setCellValue("secret_sauce");
+        r1.createCell(1).setCellValue(appPassword());
         r1.createCell(2).setCellValue("Epic sadface: Sorry, this user has been locked out.");
         r1.createCell(3).setCellValue("Negative - Locked user");
 
         Row r2 = sheet.createRow(2);
         r2.createCell(0).setCellValue("");
-        r2.createCell(1).setCellValue("secret_sauce");
+        r2.createCell(1).setCellValue(appPassword());
         r2.createCell(2).setCellValue("Epic sadface: Username is required");
         r2.createCell(3).setCellValue("Negative - Empty username");
 
         Row r3 = sheet.createRow(3);
-        r3.createCell(0).setCellValue("standard_user");
+        r3.createCell(0).setCellValue(appUsername());
         r3.createCell(1).setCellValue("");
         r3.createCell(2).setCellValue("Epic sadface: Password is required");
         r3.createCell(3).setCellValue("Negative - Empty password");
 
         Row r4 = sheet.createRow(4);
-        r4.createCell(0).setCellValue("standard_user");
+        r4.createCell(0).setCellValue(appUsername());
         r4.createCell(1).setCellValue("wrongpass");
         r4.createCell(2).setCellValue("Epic sadface: Username and password do not match any user in this service");
         r4.createCell(3).setCellValue("Negative - Wrong password");
 
         Row r5 = sheet.createRow(5);
         r5.createCell(0).setCellValue("unknown_user");
-        r5.createCell(1).setCellValue("secret_sauce");
+        r5.createCell(1).setCellValue(appPassword());
         r5.createCell(2).setCellValue("Epic sadface: Username and password do not match any user in this service");
         r5.createCell(3).setCellValue("Negative - Unknown user");
     }
@@ -125,24 +135,24 @@ public final class ExcelTestDataBootstrap {
 
         Row r1 = sheet.createRow(1);
         r1.createCell(0).setCellValue("a".repeat(200));
-        r1.createCell(1).setCellValue("secret_sauce");
+        r1.createCell(1).setCellValue(appPassword());
         r1.createCell(2).setCellValue("Epic sadface: Username and password do not match any user in this service");
         r1.createCell(3).setCellValue("Boundary - Very long username");
 
         Row r2 = sheet.createRow(2);
         r2.createCell(0).setCellValue("<script>alert(1)</script>");
-        r2.createCell(1).setCellValue("secret_sauce");
+        r2.createCell(1).setCellValue(appPassword());
         r2.createCell(2).setCellValue("Epic sadface: Username and password do not match any user in this service");
         r2.createCell(3).setCellValue("Boundary - XSS-like username");
 
         Row r3 = sheet.createRow(3);
         r3.createCell(0).setCellValue("' OR 1=1 --");
-        r3.createCell(1).setCellValue("secret_sauce");
+        r3.createCell(1).setCellValue(appPassword());
         r3.createCell(2).setCellValue("Epic sadface: Username and password do not match any user in this service");
         r3.createCell(3).setCellValue("Boundary - SQL pattern username");
 
         Row r4 = sheet.createRow(4);
-        r4.createCell(0).setCellValue("standard_user");
+        r4.createCell(0).setCellValue(appUsername());
         r4.createCell(1).setCellValue("p".repeat(200));
         r4.createCell(2).setCellValue("Epic sadface: Username and password do not match any user in this service");
         r4.createCell(3).setCellValue("Boundary - Very long password");

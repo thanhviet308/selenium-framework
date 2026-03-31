@@ -1,34 +1,34 @@
 [
   {
-    "username": "standard_user",
-    "password": "secret_sauce",
+    "username": "${APP_USERNAME}",
+    "password": "${APP_PASSWORD}",
     "role": "standard",
     "expectSuccess": true,
     "description": "Standard user login success"
   },
   {
     "username": "locked_out_user",
-    "password": "secret_sauce",
+    "password": "${APP_PASSWORD}",
     "role": "locked",
     "expectSuccess": false,
     "description": "Locked user login fails"
   },
   {
     "username": "problem_user",
-    "password": "secret_sauce",
+    "password": "${APP_PASSWORD}",
     "role": "problem",
     "expectSuccess": true,
     "description": "Problem user still can login"
   },
   {
     "username": "",
-    "password": "secret_sauce",
+    "password": "${APP_PASSWORD}",
     "role": "empty-username",
     "expectSuccess": false,
     "description": "Empty username shows error"
   },
   {
-    "username": "standard_user",
+    "username": "${APP_USERNAME}",
     "password": "wrongpass",
     "role": "wrong-pass",
     "expectSuccess": false,

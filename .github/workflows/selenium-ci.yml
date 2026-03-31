@@ -33,6 +33,9 @@ jobs:
 
       - name: Run Selenium Tests (${{ matrix.browser }})
         run: mvn clean test -Dbrowser=${{ matrix.browser }} -Denv=dev -DsuiteXmlFile=testng-smoke.xml
+        env:
+          APP_USERNAME: ${{ secrets.SAUCEDEMO_USERNAME }}
+          APP_PASSWORD: ${{ secrets.SAUCEDEMO_PASSWORD }}
 
       - name: Upload test results
         if: always()
