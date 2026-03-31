@@ -4,6 +4,9 @@ import framework.config.ConfigReader;
 import framework.driver.DriverFactory;
 import framework.utils.ExcelTestDataBootstrap;
 import framework.utils.ScreenshotUtil;
+import io.qameta.allure.Attachment;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.ITestResult;
 import org.testng.annotations.*;
@@ -55,6 +58,8 @@ public abstract class BaseTest {
     public void tearDown(ITestResult result) {
         try {
             if (result.getStatus() == ITestResult.FAILURE && getDriver() != null) {
+                attachScreenshot(getDriver());
+
                 String displayName = result.getTestName();
                 if (displayName == null || displayName.isBlank()) {
                     displayName = result.getName();
@@ -67,5 +72,10 @@ public abstract class BaseTest {
                 tlDriver.remove();
             }
         }
+    }
+
+    @Attachment(value = "Ảnh chụp khi thất bại", type = "image/png")
+    public byte[] attachScreenshot(WebDriver driver) {
+        return ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
     }
 }

@@ -4,6 +4,10 @@
     <parameter name="browser" value="chrome" />
     <parameter name="env" value="dev" />
 
+    <listeners>
+        <listener class-name="io.qameta.allure.testng.AllureTestNg" />
+    </listeners>
+
     <test name="Login Smoke Tests">
         <groups>
             <run>
