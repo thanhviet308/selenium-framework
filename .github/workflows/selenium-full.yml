@@ -1,5 +1,8 @@
 name: Full Selenium CI Pipeline
 
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main ]
@@ -24,6 +27,7 @@ jobs:
           cache: maven
 
       - name: Chạy test
+        working-directory: LAB11/Bai1/LAB9
         run: mvn clean test -Dbrowser=${{ matrix.browser }} -DsuiteXmlFile=testng-smoke.xml
         env:
           APP_USERNAME: ${{ secrets.SAUCEDEMO_USERNAME }}
@@ -34,7 +38,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: allure-results-${{ matrix.browser }}
-          path: target/allure-results/
+          path: LAB11/Bai1/LAB9/target/allure-results/
 
   publish-report:
     needs: test
@@ -56,9 +60,14 @@ jobs:
           name: allure-results-firefox
           path: allure-results/
 
+      - name: Gộp Allure results
+        run: |
+          mkdir -p allure-results-merged
+          find allure-results -type f -exec cp {} allure-results-merged/ \;
+
       - name: Tạo và Publish Allure Report
         uses: simple-elf/allure-report-action@master
         with:
-          allure_results: allure-results
+          allure_results: allure-results-merged
           gh_pages: gh-pages
           allure_report: allure-report
