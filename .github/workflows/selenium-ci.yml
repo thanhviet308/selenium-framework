@@ -11,6 +11,10 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
 
+    defaults:
+      run:
+        working-directory: LAB11/Bai1/LAB9
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -33,6 +37,6 @@ jobs:
         with:
           name: test-results
           path: |
-            target/surefire-reports/
-            target/screenshots/
+            LAB11/Bai1/LAB9/target/surefire-reports/
+            LAB11/Bai1/LAB9/target/screenshots/
           retention-days: 30
