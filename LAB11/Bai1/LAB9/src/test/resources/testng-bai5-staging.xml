@@ -1,0 +1,15 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Lab9-Bai5-Staging" parallel="false">
+    <parameter name="env" value="staging"/>
+
+    <test name="Bai5-Staging">
+        <groups>
+            <run>
+                <include name="bai5"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="lab9.bai5.ConfigReaderTest"/>
+        </classes>
+    </test>
+</suite>

@@ -1,0 +1,37 @@
+[
+  {
+    "username": "standard_user",
+    "password": "secret_sauce",
+    "role": "standard",
+    "expectSuccess": true,
+    "description": "Standard user login success"
+  },
+  {
+    "username": "locked_out_user",
+    "password": "secret_sauce",
+    "role": "locked",
+    "expectSuccess": false,
+    "description": "Locked user login fails"
+  },
+  {
+    "username": "problem_user",
+    "password": "secret_sauce",
+    "role": "problem",
+    "expectSuccess": true,
+    "description": "Problem user still can login"
+  },
+  {
+    "username": "",
+    "password": "secret_sauce",
+    "role": "empty-username",
+    "expectSuccess": false,
+    "description": "Empty username shows error"
+  },
+  {
+    "username": "standard_user",
+    "password": "wrongpass",
+    "role": "wrong-pass",
+    "expectSuccess": false,
+    "description": "Wrong password shows error"
+  }
+]
