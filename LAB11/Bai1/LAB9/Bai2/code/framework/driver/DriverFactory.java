@@ -45,16 +45,17 @@ public final class DriverFactory {
                 return new EdgeDriver(options);
             }
             case "firefox" -> {
-                WebDriverManager.firefoxdriver().setup();
-                FirefoxOptions options = new FirefoxOptions();
-                if (headless) {
-                    options.addArguments("-headless");
-                    options.addArguments("--width=1920");
-                    options.addArguments("--height=1080");
-                }
-                return new FirefoxDriver(options);
+                return createFirefoxDriver(headless);
             }
             default -> throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
+    }
+
+    private static WebDriver createFirefoxDriver(boolean headless) {
+        FirefoxOptions options = new FirefoxOptions();
+        if (headless)
+            options.addArguments("-headless");
+        WebDriverManager.firefoxdriver().setup();
+        return new FirefoxDriver(options);
     }
 }

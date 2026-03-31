@@ -11,6 +11,11 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        browser: [chrome, firefox]
+      fail-fast: false
+
     defaults:
       run:
         working-directory: LAB11/Bai1/LAB9
@@ -26,16 +31,14 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: Run Selenium Tests
-        run: mvn clean test -Dbrowser=chrome -Denv=dev -DsuiteXmlFile=testng-smoke.xml
-        env:
-          APP_PASSWORD: ${{ secrets.SAUCEDEMO_PASSWORD }}
+      - name: Run Selenium Tests (${{ matrix.browser }})
+        run: mvn clean test -Dbrowser=${{ matrix.browser }} -Denv=dev -DsuiteXmlFile=testng-smoke.xml
 
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: test-results
+          name: test-results-${{ matrix.browser }}
           path: |
             LAB11/Bai1/LAB9/target/surefire-reports/
             LAB11/Bai1/LAB9/target/screenshots/

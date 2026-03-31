@@ -26,14 +26,17 @@ public abstract class BaseTest {
         }
     }
 
-    @Parameters({"browser", "env"})
+    @Parameters({ "browser", "env" })
     @BeforeMethod(alwaysRun = true)
     public void setUp(@Optional("chrome") String browser, @Optional("dev") String env) {
-        String resolvedEnv = (env == null || env.isBlank()) ? System.getProperty("env", "dev") : env;
+        String sysEnv = System.getProperty("env", "");
+        String resolvedEnv = (sysEnv == null || sysEnv.isBlank()) ? env : sysEnv;
         if (resolvedEnv == null || resolvedEnv.isBlank()) {
             resolvedEnv = "dev";
         }
-        String resolvedBrowser = (browser == null || browser.isBlank()) ? System.getProperty("browser", "chrome") : browser;
+
+        String sysBrowser = System.getProperty("browser", "");
+        String resolvedBrowser = (sysBrowser == null || sysBrowser.isBlank()) ? browser : sysBrowser;
         if (resolvedBrowser == null || resolvedBrowser.isBlank()) {
             resolvedBrowser = "chrome";
         }

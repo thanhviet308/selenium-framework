@@ -25,42 +25,52 @@ public final class DriverFactory {
 
         switch (b) {
             case "firefox" -> {
-                WebDriverManager.firefoxdriver().setup();
-                FirefoxOptions options = new FirefoxOptions();
-                if (headless) {
-                    options.addArguments("-headless");
-                    options.addArguments("--width=1920");
-                    options.addArguments("--height=1080");
-                }
-                return new FirefoxDriver(options);
+                return createFirefoxDriver(headless);
             }
             case "edge" -> {
-                WebDriverManager.edgedriver().setup();
-                EdgeOptions options = new EdgeOptions();
-                if (headless) {
-                    options.addArguments("--headless=new");
-                    options.addArguments("--window-size=1920,1080");
-                }
-                if (isLinux && (isCI || headless)) {
-                    options.addArguments("--no-sandbox");
-                    options.addArguments("--disable-dev-shm-usage");
-                }
-                return new EdgeDriver(options);
+                return createEdgeDriver(headless, isLinux, isCI);
             }
             case "chrome" -> {
-                WebDriverManager.chromedriver().setup();
-                ChromeOptions options = new ChromeOptions();
-                if (headless) {
-                    options.addArguments("--headless=new");
-                    options.addArguments("--window-size=1920,1080");
-                }
-                if (isLinux && (isCI || headless)) {
-                    options.addArguments("--no-sandbox");
-                    options.addArguments("--disable-dev-shm-usage");
-                }
-                return new ChromeDriver(options);
+                return createChromeDriver(headless, isLinux, isCI);
             }
             default -> throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
+    }
+
+    private static WebDriver createFirefoxDriver(boolean headless) {
+        FirefoxOptions options = new FirefoxOptions();
+        if (headless) {
+            options.addArguments("-headless");
+        }
+        WebDriverManager.firefoxdriver().setup();
+        return new FirefoxDriver(options);
+    }
+
+    private static WebDriver createChromeDriver(boolean headless, boolean isLinux, boolean isCI) {
+        WebDriverManager.chromedriver().setup();
+        ChromeOptions options = new ChromeOptions();
+        if (headless) {
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
+        }
+        if (isLinux && (isCI || headless)) {
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+        }
+        return new ChromeDriver(options);
+    }
+
+    private static WebDriver createEdgeDriver(boolean headless, boolean isLinux, boolean isCI) {
+        WebDriverManager.edgedriver().setup();
+        EdgeOptions options = new EdgeOptions();
+        if (headless) {
+            options.addArguments("--headless=new");
+            options.addArguments("--window-size=1920,1080");
+        }
+        if (isLinux && (isCI || headless)) {
+            options.addArguments("--no-sandbox");
+            options.addArguments("--disable-dev-shm-usage");
+        }
+        return new EdgeDriver(options);
     }
 }
